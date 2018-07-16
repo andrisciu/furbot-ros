@@ -1,0 +1,19 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "",
+        "limitSymbolsToIncludedHeaders": true
+      },
+      "includePath": [
+        "/home/andrisciu/ros_ws/devel/include",
+        "/opt/ros/kinetic/include",
+        "/home/andrisciu/ros_ws/src/gazebo_ros/gazebo_ros_control/include",
+        "/home/andrisciu/ros_ws/src/gazebo_ros/gazebo_plugins/include",
+        "/home/andrisciu/ros_ws/src/gazebo_ros/gazebo_ros/include",
+        "/usr/include"
+      ],
+      "name": "Linux"
+    }
+  ]
+}
