@@ -46,7 +46,7 @@
         <joint name="${lr}_rear_wheel_hinge" type="continuous">
             <parent link="chassis"/>
             <child link="${lr}_rear_wheel"/>
-            <origin xyz="${-wheelPos+chassisLength/2} ${tY*wheelWidth/2+tY*chassisWidth/2} ${wheelRadius}" rpy="0 0 0" />
+            <origin xyz="${-wheelPos+chassisLength/2} ${tY*wheelWidth/2+tY*0.01+tY*chassisWidth/2} ${wheelRadius}" rpy="0 0 0" />
             <axis xyz="0 1 0" rpy="0 0 0" />
             <limit effort="100" velocity="100"/>
             <joint_properties damping="0.0" friction="0.0"/>
@@ -59,7 +59,7 @@
             </joint>
             <actuator name="${lr}_rear_Motor">
                 <mechanicalReduction>10</mechanicalReduction>
-                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+                <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
             </actuator>
         </transmission>
 
@@ -95,7 +95,7 @@
             <mu2 value="1.0"/>
             <kp value="10000000.0" />
             <kd value="1.0" />
-            <fdir1 value="0 0 1"/>
+            <fdir1 value="0 0 0"/>
             <material>Gazebo/Black</material>
         </gazebo>
 
@@ -103,14 +103,14 @@
             <visual>
                 <origin xyz="0 0 0" rpy="0 0 0" />
                 <geometry>
-                    <box size="0.001 0.001 0.001" />
+                    <box size="0.06 0.06 0.06" />
                 </geometry>
             </visual>
 
             <inertial>
                 <origin xyz="0 0 0" rpy="0 0 0" />
-                <mass value="${wheelMass}"/>
-                <box_inertia m="1" x="0.001" y="0.001" z="0.001"/>
+                <mass value="1"/>
+                <box_inertia m="1" x="0.06" y="0.06" z="0.06"/>
             </inertial>
         </link>
 
@@ -119,7 +119,7 @@
         </gazebo>
 
         <joint name="${lr}_steer_joint" type="revolute">
-            <origin xyz="${wheelPos-chassisLength/2}  ${tY*wheelWidth/2+tY*chassisWidth/2}  ${wheelRadius}" rpy="0.0 0.0 0.0"/>
+            <origin xyz="${wheelPos-chassisLength/2}  ${tY*wheelWidth/2+tY*0.01+tY*chassisWidth/2}  ${wheelRadius}" rpy="0.0 0.0 0.0"/>
             <parent link="chassis"/>
             <child link="${lr}_steer"/>
             <axis xyz="0 0 1"/>

@@ -5,7 +5,7 @@
     <xacro:property name="PI" value="3.1415926535897931"/>
 
     <xacro:property name="chassisHeight" value="0.1"/>
-    <xacro:property name="chassisLength" value="0.4"/>
+    <xacro:property name="chassisLength" value="0.6"/>
     <xacro:property name="chassisWidth" value="0.2"/>
     <xacro:property name="chassisMass" value="50"/>
 
@@ -14,7 +14,7 @@
 
     <xacro:property name="wheelWidth" value="0.05"/>
     <xacro:property name="wheelRadius" value="0.08"/>
-    <xacro:property name="wheelPos" value="0.3"/>
+    <xacro:property name="wheelPos" value="0.45"/>
     <xacro:property name="wheelMass" value="5"/>
 
     <xacro:property name="cameraSize" value="0.05"/>
@@ -58,5 +58,34 @@
 
     <front_wheel lr="right" tY="-1" />
     <front_wheel lr="left" tY="1" />
+
+    <link name="camera">
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="${cameraSize} ${cameraSize} ${cameraSize}"/>
+            </geometry>
+        </collision>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="${cameraSize} ${cameraSize} ${cameraSize}"/>
+            </geometry>
+            <material name="blue"/>
+        </visual>
+
+        <inertial>
+            <mass value="${cameraMass}" />
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <box_inertia m="${cameraMass}" x="${cameraSize}" y="${cameraSize}" z="${cameraSize}" />
+        </inertial>
+    </link>
+
+    <joint name="camera_joint" type="fixed">
+        <origin xyz="${chassisLength/2} 0.0 ${chassisHeight}" rpy="0.0 0.0 0.0"/>
+        <parent link="chassis"/>
+        <child link="camera"/>
+    </joint>
 
 </robot>

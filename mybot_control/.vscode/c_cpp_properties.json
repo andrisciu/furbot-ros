@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "browse": {
+                "databaseFilename": "",
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "includePath": [
+                "/home/andrisciu/ros_ws/devel/include",
+                "/opt/ros/kinetic/include",
+                "/home/andrisciu/ros_ws/src/gazebo_ros_control/include",
+                "/home/andrisciu/ros_ws/src/gazebo_ros/include",
+                "/home/andrisciu/ros_ws/src/gazebo_plugins/include",
+                "/usr/include"
+            ],
+            "name": "Linux",
+            "intelliSenseMode": "clang-x64"
+        }
+    ],
+    "version": 4
+}

@@ -17,4 +17,7 @@
     <remap from="/joint_states" to="/mybot/joint_states" />
   </node>
 
+  <node pkg="mybot_control" type="aggregate_topics" name="aggregate_topics" output="screen"/>
+
+
 </launch>
