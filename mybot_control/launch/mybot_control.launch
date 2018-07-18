@@ -7,16 +7,15 @@
   <node name="controller_spawner"
     pkg="controller_manager"
     type="spawner" respawn="false"
-    output="screen" ns="/mybot"
-    args="joint_state_controller rightRearWheel_effort_controller leftRearWheel_effort_controller rightFrontWheel_effort_controller leftFrontWheel_effort_controller"/>
-
+    output="screen" args="--namespace=/mybot joint_state_controller rightRearWheel_velocity_controller leftRearWheel_velocity_controller rightFrontWheel_position_controller leftFrontWheel_position_controller"/>
 
   <!-- convert joint states to TF transforms for rviz, etc -->
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
     <param name="robot_description" command="$(find xacro)/xacro.py '$(find mybot_description)/urdf/mybot.xacro'" />
     <remap from="/joint_states" to="/mybot/joint_states" />
   </node>
-
+  
+  <!-- TOPICS AGGREGATION -->
   <node pkg="mybot_control" type="aggregate_topics" name="aggregate_topics" output="screen"/>
 
 
