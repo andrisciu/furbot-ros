@@ -28,6 +28,7 @@ int main(int argc, char **argv)
   ros::Rate r(10);
   while (n1.ok())
   {
+    try{
     ROS_INFO("ODOMETRY POSITIONS");
     client.call(gms);
     std::cout << "X: " << gms.response.pose.position.x << "\tY: " << gms.response.pose.position.y << "\tZ: " << gms.response.pose.position.z << "\n";
@@ -76,5 +77,10 @@ int main(int argc, char **argv)
 
     last_time = current_time;
     r.sleep();
+    }
+    catch(const char* msg){
+      std::cout << "ERROR OCCOURED DURING ODOMETRY CALCULATION! ERR: " << msg;
+      return;
+    }
   }
 }
