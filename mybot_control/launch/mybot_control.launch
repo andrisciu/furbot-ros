@@ -4,19 +4,23 @@
   <rosparam file="$(find mybot_control)/config/mybot_control.yaml" command="load"/>
 
   <!-- load the controllers -->
-  <node name="controller_spawner"
-    pkg="controller_manager"
-    type="spawner" respawn="false"
-    output="screen" args="--namespace=/mybot joint_state_controller rightRearWheel_velocity_controller leftRearWheel_velocity_controller rightFrontWheel_position_controller leftFrontWheel_position_controller"/>
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" args="--namespace=/mybot joint_state_controller rightRearWheel_velocity_controller leftRearWheel_velocity_controller rightFrontWheel_position_controller leftFrontWheel_position_controller"/>
 
   <!-- convert joint states to TF transforms for rviz, etc -->
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" respawn="false" output="screen">
     <param name="robot_description" command="$(find xacro)/xacro.py '$(find mybot_description)/urdf/mybot.xacro'" />
     <remap from="/joint_states" to="/mybot/joint_states" />
   </node>
-  
+
   <!-- TOPICS AGGREGATION -->
-  <node pkg="mybot_control" type="aggregate_topics" name="aggregate_topics" output="screen"/>
+  <node pkg="mybot_control" type="aggregate_topics" name="aggregate_topics" output="log"/>
+
+  <!-- TELEOP -->
+  <node pkg="turtlesim" type="turtle_teleop_key" name="turtle_teleop_key" output="log" />
+  <node pkg="mybot_control" type="teleop_mybot" name="teleop_mybot" output="log"/>
+
+  <!-- ODOMETRY -->
+  <node pkg="mybot_control" type="odometry" name="odometry" output="screen"/>
 
 
 </launch>
