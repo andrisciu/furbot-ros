@@ -2,6 +2,7 @@
 #include <tf/transform_broadcaster.h>
 #include <nav_msgs/Odometry.h>
 #include <gazebo_msgs/GetModelState.h>
+#include <tf/transform_datatypes.h>
 
 int main(int argc, char **argv)
 {
@@ -17,6 +18,8 @@ int main(int argc, char **argv)
   double y = 0.0;
   double th = 0.0;
 
+  double yaw, pitch, roll = 0.0;
+
   ros::Time current_time, last_time;
   current_time = ros::Time::now();
   last_time = ros::Time::now();
@@ -28,59 +31,67 @@ int main(int argc, char **argv)
   ros::Rate r(10);
   while (n1.ok())
   {
-    try{
-    ROS_INFO("ODOMETRY POSITIONS");
-    client.call(gms);
-    std::cout << "X: " << gms.response.pose.position.x << "\tY: " << gms.response.pose.position.y << "\tZ: " << gms.response.pose.position.z << "\n";
-    ros::spinOnce();
-    current_time = ros::Time::now();
+    try
+    {
+      ROS_INFO("ODOMETRY POSITIONS");
+      client.call(gms);
+      std::cout << "POSITIONS X: " << gms.response.pose.position.x << "\tY: " << gms.response.pose.position.y << "\tZ: " << gms.response.pose.position.z << "\n";
 
-    x = gms.response.pose.position.x;
-    y = gms.response.pose.position.y;
-    th = gms.response.pose.orientation.w;
+      ros::spinOnce();
+      current_time = ros::Time::now();
 
-    geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(th);
+      tf::Quaternion q(gms.response.pose.orientation.x, gms.response.pose.orientation.y,
+                       gms.response.pose.orientation.z, gms.response.pose.orientation.w);
+      tf::Matrix3x3 m(q);
+      m.getRPY(roll, pitch, yaw);
+      
+      x = gms.response.pose.position.x;
+      y = gms.response.pose.position.y;
+      th = yaw;
 
-    //first, we'll publish the transform over tf
-    geometry_msgs::TransformStamped odom_trans;
-    odom_trans.header.stamp = current_time;
-    odom_trans.header.frame_id = "odom";
-    odom_trans.child_frame_id = "chassis";
+      geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(th);
 
-    odom_trans.transform.translation.x = x;
-    odom_trans.transform.translation.y = y;
-    odom_trans.transform.translation.z = 0.0;
-    odom_trans.transform.rotation = odom_quat;
+      //first, we'll publish the transform over tf
+      geometry_msgs::TransformStamped odom_trans;
+      odom_trans.header.stamp = current_time;
+      odom_trans.header.frame_id = "odom";
+      odom_trans.child_frame_id = "chassis";
 
-    //send the transform
-    odom_broadcaster.sendTransform(odom_trans);
+      odom_trans.transform.translation.x = x;
+      odom_trans.transform.translation.y = y;
+      odom_trans.transform.translation.z = 0.0;
+      odom_trans.transform.rotation = odom_quat;
 
-    //next, we'll publish the odometry message over ROS
-    nav_msgs::Odometry odom;
-    odom.header.stamp = current_time;
-    odom.header.frame_id = "odom";
+      //send the transform
+      odom_broadcaster.sendTransform(odom_trans);
 
-    //set the position
-    odom.pose.pose.position.x = x;
-    odom.pose.pose.position.y = y;
-    odom.pose.pose.position.z = 0.0;
-    odom.pose.pose.orientation = odom_quat;
+      //next, we'll publish the odometry message over ROS
+      nav_msgs::Odometry odom;
+      odom.header.stamp = current_time;
+      odom.header.frame_id = "odom";
 
-    //set the velocity
-    odom.child_frame_id = "chassis";
-    odom.twist.twist.linear.x = gms.response.twist.linear.x;
-    odom.twist.twist.linear.y = gms.response.twist.linear.y;
-    odom.twist.twist.angular.z = gms.response.twist.angular.z;
+      //set the position
+      odom.pose.pose.position.x = x;
+      odom.pose.pose.position.y = y;
+      odom.pose.pose.position.z = 0.0;
+      odom.pose.pose.orientation = odom_quat;
 
-    //publish the message
-    odom_pub.publish(odom);
+      //set the velocity
+      odom.child_frame_id = "chassis";
+      odom.twist.twist.linear.x = gms.response.twist.linear.x;
+      odom.twist.twist.linear.y = gms.response.twist.linear.y;
+      odom.twist.twist.angular.z = gms.response.twist.angular.z;
 
-    last_time = current_time;
-    r.sleep();
+      //publish the message
+      odom_pub.publish(odom);
+
+      last_time = current_time;
+      r.sleep();
     }
-    catch(const char* msg){
+    catch (const char *msg)
+    {
       std::cout << "ERROR OCCOURED DURING ODOMETRY CALCULATION! ERR: " << msg;
-      return;
+      return 0;
     }
   }
 }

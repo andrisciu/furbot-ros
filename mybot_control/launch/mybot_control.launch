@@ -16,11 +16,18 @@
   <node pkg="mybot_control" type="aggregate_topics" name="aggregate_topics" output="log"/>
 
   <!-- TELEOP -->
-  <node pkg="turtlesim" type="turtle_teleop_key" name="turtle_teleop_key" output="log" />
-  <node pkg="mybot_control" type="teleop_mybot" name="teleop_mybot" output="log"/>
+  <rosparam param="joy_node/dev">/dev/input/js1</rosparam>
+  <node pkg="turtlesim" type="turtle_teleop_key" name="turtle_teleop_key" output="log">
+    <remap from="/turtle1/cmd_vel" to="cmd_vel" />
+
+  </node>
+  <node pkg="mybot_control" type="teleop_mybot" name="teleop_mybot" output="log">
+    <remap from="/turtle1/cmd_vel" to="cmd_vel" />
+  </node>
+  <node pkg="joy" type="joy_node" name="joy_node" output="screen" />
 
   <!-- ODOMETRY -->
-  <node pkg="mybot_control" type="odometry" name="odometry" output="screen"/>
+  <node pkg="mybot_control" type="odometry" name="odometry" output="log" />
 
 
 </launch>
