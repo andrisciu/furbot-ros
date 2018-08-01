@@ -3,6 +3,7 @@
 #include <nav_msgs/Odometry.h>
 #include <gazebo_msgs/GetModelState.h>
 #include <tf/transform_datatypes.h>
+#include <geometry_msgs/Twist.h>
 
 int main(int argc, char **argv)
 {
@@ -11,7 +12,9 @@ int main(int argc, char **argv)
   ros::NodeHandle n1;
   ros::NodeHandle n2;
 
-  ros::Publisher odom_pub = n1.advertise<nav_msgs::Odometry>("odom", 50);
+  ros::Publisher odom_pub = n1.advertise<nav_msgs::Odometry>("odom", 500);
+  ros::Publisher cmd_vel_pub = n1.advertise<geometry_msgs::Twist>("/mybot/cmd_vel", 500);
+
   tf::TransformBroadcaster odom_broadcaster;
 
   double x = 0.0;
@@ -28,7 +31,7 @@ int main(int argc, char **argv)
   gazebo_msgs::GetModelState gms;
   gms.request.model_name = "mybot";
 
-  ros::Rate r(10);
+  ros::Rate r(1000);
   while (n1.ok())
   {
     try
@@ -55,7 +58,7 @@ int main(int argc, char **argv)
       geometry_msgs::TransformStamped odom_trans;
       odom_trans.header.stamp = current_time;
       odom_trans.header.frame_id = "odom";
-      odom_trans.child_frame_id = "chassis";
+      odom_trans.child_frame_id = "footprint";
 
       odom_trans.transform.translation.x = x;
       odom_trans.transform.translation.y = y;
@@ -77,12 +80,13 @@ int main(int argc, char **argv)
       odom.pose.pose.orientation = odom_quat;
 
       //set the velocity
-      odom.child_frame_id = "chassis";
+      odom.child_frame_id = "footprint";
       odom.twist.twist.linear.x = gms.response.twist.linear.x;
       odom.twist.twist.linear.y = gms.response.twist.linear.y;
       odom.twist.twist.angular.z = gms.response.twist.angular.z;
 
       //publish the message
+      cmd_vel_pub.publish(odom.twist.twist);
       odom_pub.publish(odom);
 
       last_time = current_time;

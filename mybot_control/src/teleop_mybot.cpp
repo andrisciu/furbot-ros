@@ -4,9 +4,6 @@
 #include <geometry_msgs/Twist.h>
 #include <sensor_msgs/Joy.h>
 
-#define ANGULAR_RATIO 0.3
-#define VELOCITY_RATIO 7
-
 int check1, check2 = 0;
 std_msgs::Float64 lin;
 std_msgs::Float64 ang;
@@ -38,8 +35,8 @@ void JoyCallback(const sensor_msgs::Joy::ConstPtr &joy)
 {
 
     geometry_msgs::Twist twist_bot;
-    twist_bot.angular.z = ANGULAR_RATIO * joy->axes[angular_joy];
-    twist_bot.linear.x = VELOCITY_RATIO * joy->axes[linear_joy];
+    twist_bot.angular.z = joy->axes[angular_joy];
+    twist_bot.linear.x = joy->axes[linear_joy];
 
     lin.data = twist_bot.linear.x;
     ang.data = twist_bot.angular.z;
@@ -53,7 +50,7 @@ int main(int argc, char **argv)
     old_ang.data = 0.0;
     old_lin.data = 0.0;
 
-    ros::init(argc, argv, "aggregate_topics");
+    ros::init(argc, argv, "teleop_mybot");
 
     ros::NodeHandle pub;
     ros::NodeHandle sub;
@@ -64,6 +61,9 @@ int main(int argc, char **argv)
     ros::Subscriber key = sub.subscribe("turtle1/cmd_vel", 1000, key_callback);
 
     ros::Rate loop_rate(50);
+    double VELOCITY_RATIO = 7;
+    double ANGULAR_RATIO = 0.4;
+
     while (ros::ok())
     {
         if (check1 == 1)
@@ -91,6 +91,8 @@ int main(int argc, char **argv)
             try
             {
                 std::cout << "VEL: " << lin.data << "\tANG: " << ang.data << "\n";
+                lin.data = lin.data * VELOCITY_RATIO;
+                ang.data = ang.data * ANGULAR_RATIO;
                 front.publish(ang);
                 rear.publish(lin);
             }
