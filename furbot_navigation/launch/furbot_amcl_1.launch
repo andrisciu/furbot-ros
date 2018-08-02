@@ -1,0 +1,11 @@
+<launch>
+
+<!-- Map server -->
+  <arg name="map_file" default="$(find furbot_navigation)/maps/myworld.yaml"/>
+    <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
+
+
+  <!-- Place map frame at odometry frame -->
+  <node pkg="tf" type="static_transform_publisher" name="map_odom_broadcaster" args="0 0 0 0 0 0 map odom 100"/>
+
+</launch>
