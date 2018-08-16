@@ -26,8 +26,10 @@
 		<param name="laserscan_topics" value ="/furbot/laser/scan/front /furbot/laser/scan/rear" />
 	</node>
 
-	<!-- MAP LOADER -->
+	<!-- MAP LOADER & TRAJECTORY CREATOR -->
 
-	<include file="$(find furbot_navigation)/launch/move_base_1.launch"/>
+	<include file="$(find furbot_navigation)/launch/move_base_teb.launch"/>
+
+
 
 </launch>

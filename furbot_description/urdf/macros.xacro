@@ -125,7 +125,7 @@
             <parent link="chassis"/>
             <child link="${lr}_steer"/>
             <axis xyz="0 0 1"/>
-            <limit lower="-1" upper="1" effort="100" velocity="100"/>
+            <limit lower="-2" upper="2" effort="100" velocity="100"/>
         </joint>>
 
         <joint name="${lr}_front_wheel_hinge" type="continuous">

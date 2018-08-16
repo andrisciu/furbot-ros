@@ -49,6 +49,7 @@
     <link name="footprint" />
 
     <joint name="base_joint" type="fixed">
+        <origin xyz="${-chassisLength/2 + wheelPos} 0.0 ${wheelRadius}" rpy="0.0 0.0 0.0"/>
         <parent link="footprint"/>
         <child link="chassis"/>
     </joint>
