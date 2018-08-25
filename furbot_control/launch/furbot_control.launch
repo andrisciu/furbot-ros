@@ -15,11 +15,11 @@
   <!-- TOPICS AGGREGATION -->
   <node pkg="furbot_control" type="aggregate_topics" name="aggregate_topics" output="log"/>
 
-  <!-- TELEOP -->
+  <!-- CONTROL + TELEOP -->
   <rosparam param="joy_node/dev">/dev/input/js1</rosparam>
 
   <node pkg="turtlesim" type="turtle_teleop_key" name="turtle_teleop_key" output="log" />
-  <node pkg="furbot_control" type="teleop_furbot" name="teleop_furbot" output="log" />
+  <node pkg="furbot_control" type="control_furbot" name="control_furbot" output="log" />
   <node pkg="joy" type="joy_node" name="joy_node" output="screen" />
 
   <!-- ODOMETRY -->
