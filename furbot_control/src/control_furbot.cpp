@@ -22,7 +22,9 @@ int linear_joy, angular_joy;
 void calc_steer_angle(double delta){
 
     if( delta == 0.0 ){
-        delta= 0.00001;
+        steer[0].data = 0;
+        steer[1].data = 0;
+        return;
     }
 
     double radius;
@@ -44,7 +46,7 @@ void calc_steer_angle(double delta){
 
 void calc_wheel_spin(double vel){
 
-    double spin = (L/wheel_radius)*vel;
+    double spin = (vel/wheel_radius);
     lin.data = spin;
 
     return;

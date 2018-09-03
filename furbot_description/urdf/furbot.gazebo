@@ -3,7 +3,7 @@
     xmlns:xacro="http://www.ros.org/wiki/xacro">
 
     <gazebo reference="chassis">
-        <material>Gazebo/Orange</material>
+        <material>Gazebo/Red</material>
     </gazebo>
 
     <gazebo>
@@ -54,7 +54,7 @@
     <gazebo reference="base_laser_link_front">
         <sensor type="ray" name="head_sensor">
             <pose>0 0 0 0 0 0</pose>
-            <visualize>true</visualize>
+            <visualize>flase</visualize>
             <update_rate>40</update_rate>
             <ray>
                 <scan>
@@ -62,7 +62,7 @@
                         <samples>720</samples>
                         <resolution>1</resolution>
                         <min_angle>-1.57</min_angle>
-                        <max_angle>1.57</max_angle>
+                        <max_angle>3.14</max_angle>
                     </horizontal>
                 </scan>
                 <range>
@@ -87,14 +87,14 @@
     <gazebo reference="base_laser_link_rear">
         <sensor type="ray" name="head_hokuyo_sensor">
             <pose>0 0 0 0 0 0</pose>
-            <visualize>true</visualize>
+            <visualize>false</visualize>
             <update_rate>40</update_rate>
             <ray>
                 <scan>
                     <horizontal>
                         <samples>720</samples>
                         <resolution>1</resolution>
-                        <min_angle>1.57</min_angle>
+                        <min_angle>3.14</min_angle>
                         <max_angle>-1.57</max_angle>
                     </horizontal>
                 </scan>
@@ -115,8 +115,4 @@
             </plugin>
         </sensor>
     </gazebo>
-
-
-
-
 </robot>
