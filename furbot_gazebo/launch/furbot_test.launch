@@ -13,16 +13,14 @@
 
 	<!-- push robot_description to factory and spawn robot in gazebo -->
 	<node name="furbot_spawn" pkg="gazebo_ros" type="spawn_model" output="screen" args="-urdf -param robot_description -model furbot" />
-	<node name="image_view" pkg="image_view" type="image_view" args="image:=/furbot/camera_1/image_raw" />
-
-	<!-- RVIZ VISUALIZATION -->
-	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find furbot_gazebo)/rviz/furbot.rviz" />
 
 	<!-- LASER MERGER -->
 	<node pkg="ira_laser_tools" name="laserscan_multi_merger" type="laserscan_multi_merger" output="screen">
-		<param name="destination_frame" value="chassis"/>
-		<param name="scan_destination_topic" value="/furbot/laser/scan"/>
-		<param name="laserscan_topics" value ="/furbot/laser/scan/front /furbot/laser/scan/rear" />
+		<param name="destination_frame" value="footprint"/>
+		<param name="scan_destination_topic" value="/furbot/laser_scan"/>
+		<param name="laserscan_topics" value ="/furbot/laser_scan/front /furbot/laser_scan/rear" />
 	</node>
 
+	<!-- RQT PLOT in order to set the pid values of the motors-->
+	<node name="rqt_plot" pkg="rqt_plot" type="rqt_plot" output="log" />
 </launch>

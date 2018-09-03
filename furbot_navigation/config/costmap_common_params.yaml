@@ -1,9 +1,7 @@
 
 #---standard pioneer footprint---
 #---(in meters)---
-#footprint: [ [0.254, -0.0508], [0.1778, -0.0508], [0.1778, -0.1778], [-0.1905, -0.1778], [-0.254, 0], [-0.1905, 0.1778], [0.1778, 0.1778], [0.1778, 0.0508], [0.254, 0.0508] ]
-footprint: [ [-0.1,-0.125], [0.5,-0.125], [0.5,0.125], [-0.1,0.125] ]
-
+footprint: [ [-0.15,-0.24], [0.65,-0.24], [0.65,0.24], [-0.15,0.24] ]
 
 transform_tolerance: 0.2
 map_type: costmap
@@ -17,13 +15,12 @@ obstacle_layer:
  combination_method: 1
 
  observation_sources: laser_scan_sensor
- laser_scan_sensor: {sensor_frame: footprint, data_type: LaserScan, topic: /furbot/laser/scan, marking: true, clearing: true}
+ laser_scan_sensor: {sensor_frame: footprint, data_type: LaserScan, topic: /furbot/laser_scan, marking: true, clearing: true}
 
 inflation_layer:
   enabled:              true
   cost_scaling_factor:  10  # exponential rate at which the obstacle cost drops off (default: 10)
   inflation_radius:     0.5  # max. distance from an obstacle at which costs are incurred for planning paths.
-
 
 static_layer:
   enabled:              false

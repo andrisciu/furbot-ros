@@ -14,10 +14,10 @@
         </plugin>
     </gazebo>
 
-    <gazebo reference="camera">
+    <gazebo reference="furbot_camera">
         <material>Gazebo/Blue</material>
 
-        <sensor type="camera" name="camera_1">
+        <sensor type="camera" name="camera">
             <update_rate>30.0</update_rate>
 
             <camera name="head">
@@ -36,7 +36,7 @@
             <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
                 <alwaysOn>true</alwaysOn>
                 <updateRate>0.0</updateRate>
-                <cameraName>furbot/camera_1</cameraName>
+                <cameraName>camera</cameraName>
                 <imageTopicName>image_raw</imageTopicName>
                 <cameraInfoTopicName>camera_info</cameraInfoTopicName>
                 <frameName>camera_link</frameName>
@@ -61,8 +61,8 @@
                     <horizontal>
                         <samples>720</samples>
                         <resolution>1</resolution>
-                        <min_angle>-2.35</min_angle>
-                        <max_angle>2.35</max_angle>
+                        <min_angle>-1.57</min_angle>
+                        <max_angle>1.57</max_angle>
                     </horizontal>
                 </scan>
                 <range>
@@ -77,7 +77,7 @@
                 </noise>
             </ray>
             <plugin name="gazebo_ros_head_hokuyo_controller_front" filename="libgazebo_ros_laser.so">
-                <topicName>/furbot/laser/scan/front</topicName>
+                <topicName>/furbot/laser_scan/front</topicName>
                 <frameName>base_laser_link_front</frameName>
             </plugin>
         </sensor>
@@ -94,8 +94,8 @@
                     <horizontal>
                         <samples>720</samples>
                         <resolution>1</resolution>
-                        <min_angle>2.35</min_angle>
-                        <max_angle>-2.35</max_angle>
+                        <min_angle>1.57</min_angle>
+                        <max_angle>-1.57</max_angle>
                     </horizontal>
                 </scan>
                 <range>
@@ -110,7 +110,7 @@
                 </noise>
             </ray>
             <plugin name="gazebo_ros_head_hokuyo_controller_rear" filename="libgazebo_ros_laser.so">
-                <topicName>/furbot/laser/scan/rear</topicName>
+                <topicName>/furbot/laser_scan/rear</topicName>
                 <frameName>base_laser_link_rear</frameName>
             </plugin>
         </sensor>

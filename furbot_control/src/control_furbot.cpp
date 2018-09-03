@@ -5,8 +5,9 @@
 #include <sensor_msgs/Joy.h>
 #include <math.h>
 
-#define L 0.3
-#define T 0.27
+#define L 0.5
+#define T 0.4
+#define wheel_radius 0.09
 #define VELOCITY_RATIO 10
 #define ANGULAR_RATIO 0.4
 
@@ -15,10 +16,10 @@ std_msgs::Float64 lin;
 std_msgs::Float64 ang;
 std_msgs::Float64 old_ang;
 std_msgs::Float64 old_lin;
-double steer[2];
+std_msgs::Float64 steer[2];
 int linear_joy, angular_joy;
 
-double calcAngleRight(double delta){
+void calc_steer_angle(double delta){
 
     if( delta == 0.0 ){
         delta= 0.00001;
@@ -27,28 +28,26 @@ double calcAngleRight(double delta){
     double radius;
     double delta_zero;
     double delta_one;
-
     
     radius = L / tan(delta);
     delta_zero = atan(L/(radius + (T/2)));
 
-    return delta_zero;
-}
-
-double calcAngleLeft(double delta){
-
-    if( delta == 0.0 ){
-        delta= 0.00001;
-    }
-
-    double radius;
-    double delta_zero;
-    double delta_one;
+    steer[0].data = delta_zero;
 
     radius = L / tan(delta);
     delta_one = atan(L/(radius - (T/2)));
 
-    return delta_one;
+    steer[1].data = delta_one;
+
+    return;
+}
+
+void calc_wheel_spin(double vel){
+
+    double spin = (L/wheel_radius)*vel;
+    lin.data = spin;
+
+    return;
 }
 
 
@@ -78,8 +77,8 @@ void JoyCallback(const sensor_msgs::Joy::ConstPtr &joy)
     ang.data = joy->axes[angular_joy];
     lin.data = joy->axes[linear_joy];
 
-    steer[0] = calcAngleRight(ang.data);
-    steer[1] = calcAngleLeft(ang.data);
+    calc_steer_angle(ang.data);
+    calc_wheel_spin(lin.data);
 
     check = 2;
 }
@@ -90,9 +89,9 @@ void CmdVelCallback(const geometry_msgs::Twist::ConstPtr &vel)
     ang.data = vel->angular.z;
     lin.data = vel->linear.x;
     
-    steer[0] = calcAngleRight(ang.data);
-    steer[1] = calcAngleLeft(ang.data);
-    
+    calc_steer_angle(ang.data);
+    calc_wheel_spin(lin.data);
+
     check = 2;
 }
 
@@ -144,15 +143,11 @@ int main(int argc, char **argv)
         if(check == 2){
 
             try{
-
-                std_msgs::Float64 steer_angles[2];
-                steer_angles[0].data = steer[0];
-                steer_angles[1].data = steer[1];                
+              
                 std::cout << "VEL: " << lin.data << "\tANG: " << ang.data << "\n";
-                lin.data = lin.data * VELOCITY_RATIO;
-
-                front_right.publish(steer_angles[0]);
-                front_left.publish(steer_angles[1]);
+                
+                front_right.publish(steer[0]);
+                front_left.publish(steer[1]);
                 rear.publish(lin);
 
             }

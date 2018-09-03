@@ -21,9 +21,9 @@
 
 	<!-- LASER MERGER -->
 	<node pkg="ira_laser_tools" name="laserscan_multi_merger" type="laserscan_multi_merger" output="screen">
-		<param name="destination_frame" value="chassis"/>
-		<param name="scan_destination_topic" value="/furbot/laser/scan"/>
-		<param name="laserscan_topics" value ="/furbot/laser/scan/front /furbot/laser/scan/rear" />
+		<param name="destination_frame" value="footprint"/>
+		<param name="scan_destination_topic" value="/furbot/laser_scan"/>
+		<param name="laserscan_topics" value ="/furbot/laser_scan/front /furbot/laser_scan/rear" />
 	</node>
 
 	<!-- MAP LOADER -->

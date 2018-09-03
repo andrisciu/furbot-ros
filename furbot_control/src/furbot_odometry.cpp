@@ -13,7 +13,7 @@ int main(int argc, char **argv)
   ros::NodeHandle n2;
 
   ros::Publisher odom_pub = n1.advertise<nav_msgs::Odometry>("odom", 500);
-  ros::Publisher cmd_vel_pub = n1.advertise<geometry_msgs::Twist>("/furbot/cmd_vel", 500);
+  ros::Publisher cmd_vel_pub = n1.advertise<geometry_msgs::Twist>("/furbot/twist", 500);
 
   tf::TransformBroadcaster odom_broadcaster;
 
@@ -86,7 +86,7 @@ int main(int argc, char **argv)
       odom.twist.twist.angular.z = gms.response.twist.angular.z;
 
       //publish the message
-      cmd_vel_pub.publish(odom.twist.twist);
+      cmd_vel_pub.publish(gms.response.twist);
       odom_pub.publish(odom);
 
       last_time = current_time;

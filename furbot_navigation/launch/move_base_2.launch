@@ -1,6 +1,4 @@
 <launch>
-    <!--- Run AMCL -->
-    <include file="$(find furbot_navigation)/launch/furbot_amcl_2.launch" />
 
     <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
         <rosparam file="$(find furbot_navigation)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
@@ -14,6 +12,15 @@
         <remap from="scan" to="furbot/laser/scan"/>
         <param name="move_base/DWAPlannerROS/yaw_goal_tolerance" value="0.2"/>
         <param name="move_base/DWAPlannerROS/xy_goal_tolerance" value="0.2"/>
-        
+
     </node>
+
+    <!-- Map server -->
+    <arg name="map_file" default="$(find furbot_navigation)/maps/myworld_2.yaml"/>
+    <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
+
+
+    <!-- Place map frame at odometry frame -->
+    <node pkg="tf" type="static_transform_publisher" name="map_odom_broadcaster" args="0 0 0 0 0 0 map odom 100"/>
+
 </launch> 
