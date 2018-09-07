@@ -1,0 +1,27 @@
+<launch>
+  <param name="/use_sim_time" value="true"/>
+  <node pkg="gmapping" name="slam_gmapping" type="slam_gmapping" output="screen">
+    <param name="delta" value="0.01"/>
+    <param name="xmin" value="-40"/>
+    <param name="xmax" value="40"/>
+    <param name="ymin" value="-40"/>
+    <param name="ymax" value="40"/>
+    <remap from="scan" to="furbot/laser_scan"/>
+    <param name="base_frame" value="footprint"/>
+    <param name="odom_frame" value="odom"/>
+    <param name="map_update_interval" value="4"/>
+
+    <param name="linearUpdate" value="0.5"/>
+    <param name="angularUpdate" value="0.5"/>
+    <param name="temporalUpdate" value="0.5"/>
+    <param name="resampleThreshold" value="0.5"/>
+    <param name="particles" value="1"/>
+    <param name="minimumScore" value="500"/>
+
+    <param name="srr" value="0.0" />
+    <param name="srt" value="0.0" />
+    <param name="str" value="0.0" />
+    <param name="stt" value="0.0" />
+
+  </node>
+</launch>
